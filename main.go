@@ -23,6 +23,8 @@ func startTimer(ticker time.Ticker, timer [4]int, stop chan bool) {
 	} else if timer[3] % 2 == 1 {
 		timerType = "Break"
 	}
+
+	fmt.Printf("\r\033[A\033[K%s: %d minutes left\n", timerType, i)
 	
 	for range ticker.C {
 		if i != 0 {
