@@ -31,13 +31,27 @@ func startTimer(ticker time.Ticker, timer [4]int, stop chan bool) {
 				return
 			default:
 				i--
-				fmt.Printf("\r\033[A\033[K%d seconds left\n", i)
+				fmt.Printf("\r\033[A\033[K%s: %d seconds left\n", timerType, i)
 			}
 		} else {
-			// Swap timer
-			timer = func() [2]int {
-				return [2]int{timer[1], timer[0]}
-			}()
+			timer[3]++
+
+			if timer[3] < 7 {
+				// Swap work/break timer
+				timer = func() [4]int {
+					return [4]int{timer[1], timer[0], timer[2], timer[3]}
+				}()
+			} else {
+				// Swap work/long break timer
+				timer = func() [4]int {
+					return [4]int{timer[2], timer[1], timer[0], timer[3]}
+				}()
+
+				// Reset countdown after long break
+				if timer[3] == 8 {
+					timer[3] = 0
+				}
+			}
 
 			go startTimer(ticker, timer, stop)
 			return
@@ -52,7 +66,7 @@ func main() {
 	var input int
 	var ticker time.Ticker
 
-	timer := [2]int{25, 5}
+	timer := [4]int{25, 5, 30, 0}
 
 	stop := make(chan bool)
 
