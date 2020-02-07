@@ -31,7 +31,7 @@ func startTimer(ticker time.Ticker, timer [4]int, stop chan bool) {
 				return
 			default:
 				i--
-				fmt.Printf("\r\033[A\033[K%s: %d seconds left\n", timerType, i)
+				fmt.Printf("\r\033[A\033[K%s: %d minutes left\n", timerType, i)
 			}
 		} else {
 			timer[3]++
@@ -79,7 +79,7 @@ func main() {
 
 		switch input {
 		case 1:
-			ticker = *time.NewTicker(time.Second)
+			ticker = *time.NewTicker(time.Minute)
 			go startTimer(ticker, timer, stop)
 		case 2:
 			stop <- true
