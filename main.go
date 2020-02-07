@@ -12,9 +12,18 @@ func usage() {
 	fmt.Println("[4] Exit")
 }
 
-func startTimer(ticker time.Ticker, timer [2]int, stop chan bool) {
+func startTimer(ticker time.Ticker, timer [4]int, stop chan bool) {
 
 	i := timer[0]
+	
+	timerType := "Work"
+
+	if timer[3] == 7 {
+		timerType = "Long Break"
+	} else if timer[3] % 2 == 1 {
+		timerType = "Break"
+	}
+	
 	for range ticker.C {
 		if i != 0 {
 			select {
